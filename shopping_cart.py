@@ -40,6 +40,7 @@ def to_usd(my_price):
 
 # 1) Load/Import packages
 import os
+from datetime import datetime
 from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
@@ -59,4 +60,12 @@ while True:
     else:
         print("PRODUCT ID is invalid, please try again!")
 
+# 3) Generate Receipt based on Product inputs
+print("ANTHONY'S AMAZING ASSEMBLY OF GROCERIES")
+print("WWW.ANTGROCERIES.COM")
+print("--------------------------------------")
 
+today = datetime.now()
+today = today.strftime("%Y-%m-%d %I:%M %p")
+print(f"CHECKOUT AT:", today)
+print("--------------------------------------")
