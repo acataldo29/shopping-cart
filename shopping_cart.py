@@ -23,7 +23,7 @@ products = [
     {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25}
 ] 
 
-#Define function to convert price to USD
+#User-defined Functions
 def to_usd(my_price):
     """
     Converts a numeric value to usd-formatted string, for printing and display purposes.
@@ -36,31 +36,47 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}" #> $12,000.71
 
+def countX(x): #matching_products[i]["id"]
+    """
+    This function returns a list of individual item count to use on 
+    the receipt. 
+
+    This function is used in a for loop with the input matching the 
+    comment next to the def statement
+    """
+    count = 1
+    for i in matching_product_id:
+        if int(i) == x:
+            count = count + 1
+            countlist.append(count)
+
 ################################################ Begin User Code ################################################
 
 # 1) Load/Import packages
 import os
+import operator
 from datetime import datetime
 from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 
-# 2) Allow clerk to input id:
-matching_product = []
+
+# 2) Allow clerk to input id
+matching_product_id = []
 while True:
     p_input = input(f"Please input the Product ID (1 to {len(products)} are valid), or 'Done' if there are no more items: ")
     if p_input == "Done":
-        print("SHOPPING CART ITEM ID(S):", matching_product)
+        print("SHOPPING CART ITEM ID(S):", matching_product_id)
         print("--------------------------------------")
         print("GENERATING RECEIPT...")
-        print("--------------------------------------")
         break
-    elif int(p_input) in range(1, len(products)):
-        matching_product.append(int(p_input))
+    elif int(p_input) in range(1, len(products)+1):
+        matching_product_id.append(p_input)
     else:
         print("PRODUCT ID is invalid, please try again!")
 
-# 3) Generate Receipt based on Product inputs
+print("--------------------------------------")
+
+# 4) Generate Receipt based on Product inputs
 print("ANTHONY'S AMAZING ASSEMBLY OF GROCERIES")
 print("WWW.ANTGROCERIES.COM")
 print("--------------------------------------")
@@ -68,4 +84,31 @@ print("--------------------------------------")
 today = datetime.now()
 today = today.strftime("%Y-%m-%d %I:%M %p")
 print(f"CHECKOUT AT:", today)
+
 print("--------------------------------------")
+
+        #List Products
+print("SELECTED PRODUCTS:")
+
+matching_products = []
+for item in products:
+    if str(item["id"]) in matching_product_id:
+        matching_products.append(item)
+
+no_dup = []
+no_dup = [x for x in matching_products if x["id"] not in no_dup]
+
+frequency = []
+for i in matching_product_id:
+   for j in range(1, len(matching_product_id)):
+        if i in frequency:
+            frequency += 1
+        else:
+            frequency = 1
+
+
+#count = operator.getitem(frequency.values()[2], frequency)
+#print(count)
+
+for j in range(1, len(no_dup)):
+    print(f"{count[j]}x...", no_dup[j]["name"], "("+str(no_dup[j]["price"])+")")
