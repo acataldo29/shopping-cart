@@ -36,20 +36,6 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}" #> $12,000.71
 
-def countX(x): #matching_products[i]["id"]
-    """
-    This function returns a list of individual item count to use on 
-    the receipt. 
-
-    This function is used in a for loop with the input matching the 
-    comment next to the def statement
-    """
-    count = 1
-    for i in matching_product_id:
-        if int(i) == x:
-            count = count + 1
-            countlist.append(count)
-
 ################################################ Begin User Code ################################################
 
 # 1) Load/Import packages
@@ -98,17 +84,8 @@ for item in products:
 no_dup = []
 no_dup = [x for x in matching_products if x["id"] not in no_dup]
 
-frequency = []
-for i in matching_product_id:
-   for j in range(1, len(matching_product_id)):
-        if i in frequency:
-            frequency += 1
-        else:
-            frequency = 1
+frequency = [matching_product_id.count(int(x)) for x in matching_product_id]
+print(frequency)
 
-
-#count = operator.getitem(frequency.values()[2], frequency)
-#print(count)
-
-for j in range(1, len(no_dup)):
-    print(f"{count[j]}x...", no_dup[j]["name"], "("+str(no_dup[j]["price"])+")")
+for j in range(0, len(no_dup)):
+   print(f"{frequency[j]}x...", no_dup[j]["name"], "("+str(to_usd(no_dup[j]["price"]))+")")
