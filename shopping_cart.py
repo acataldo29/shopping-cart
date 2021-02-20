@@ -73,7 +73,7 @@ print(f"CHECKOUT AT:", today)
 
 print("--------------------------------------")
 
-        #List Products
+#     List Itemized Products + Prices
 print("SELECTED PRODUCTS:")
 
 matching_products = []
@@ -84,8 +84,11 @@ for item in products:
 no_dup = []
 no_dup = [x for x in matching_products if x["id"] not in no_dup]
 
-frequency = [matching_product_id.count(int(x)) for x in matching_product_id]
-print(frequency)
+matching_product_id.sort()
+
+frequency = []
+for i in matching_product_id:
+    frequency.append(matching_product_id.count(i))
 
 for j in range(0, len(no_dup)):
    print(f"{frequency[j]}x...", no_dup[j]["name"], "("+str(to_usd(no_dup[j]["price"]))+")")
