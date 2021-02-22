@@ -3,9 +3,10 @@
 import os
 import operator
 import collections
+import sendgrid
 from datetime import datetime
 from dotenv import load_dotenv
-from sendgrid import SendGridAPIClient
+
 
 
 load_dotenv() #Loads the created .env with environment variables
@@ -63,7 +64,7 @@ def sum_product(list1, list2): #This function gives the sumprooduct of two lists
 matching_product_id = []
 while True:
     p_input = input(f"Please input the Product ID (1 to {len(products)} are valid), or 'Done' if there are no more items: ")
-    if p_input == "Done":
+    if p_input == "Done" or p_input == "done" or p_input == "DONE":
         print("SHOPPING CART ITEM ID(S):", matching_product_id)
         print("--------------------------------------")
         print("GENERATING RECEIPT...")
@@ -99,22 +100,15 @@ for item in products:
 no_dup = []
 no_dup = [x for x in matching_products if x["id"] not in no_dup]
 
-#frequency = []
-#for i in matching_product_id:
-#    frequency.append(matching_product_id.count(i))
-
-freq = []
 sort_id = []
-for i in matching_product_id:
-    int(i)
-for i in range(0,len(matching_product_id)):
-    sort_id.append(matching_product_id.sort())
-    freq = dict(collections.Counter(matching_product_id))
+for i in range(0, len(matching_product_id)):
+   sort_id.append(int(matching_product_id[i]))
 
-print(sort_id)
-print(freq)
+sort_id.sort()
+freq = dict(collections.Counter(sort_id))
 
-exit()
+for j in range(0, len(no_dup)):
+   print(f"{list(freq.values())[j]}x ...", no_dup[j]["name"], "("+str(to_usd(no_dup[j]["price"]))+")")
 print("--------------------------------------")
 
 #   3) Generate Subtotal, Tax, Total
@@ -126,17 +120,24 @@ for i in range(0, len(no_dup)):
 
 product = []
 for i in range(0, len(pricelist)):
-    product.append(pricelist[i] * frequency[i])
+    product.append(pricelist[i] * list(freq.values())[i])
     subtot = sum(product)
 
 print(f"SUBTOTAL:", to_usd(subtot))
 
+TAX_RATE = os.getenv("TAX_RATE", default = 0.0875)
+TAX_RATE = float(TAX_RATE)
+
 tax_rate = 0.0875
 tax = tax_rate * subtot
 
-print(f"TAX: {to_usd(tax)}")
-print(f"TOTAL:", to_usd(subtot+tax))
+print(f"TAX: {to_usd(TAX_RATE * subtot)}")
+print(f"TOTAL:", to_usd(subtot+(TAX_RATE * subtot)))
 
 print("--------------------------------------")
 print("THANK YOU! PLEASE SHOP AGAIN SOON!")
 print("--------------------------------------")
+
+############################################### Begin Email ################################################
+
+
