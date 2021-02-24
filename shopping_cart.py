@@ -3,11 +3,8 @@
 import os
 import operator
 import collections
-import sendgrid
 from datetime import datetime
 from dotenv import load_dotenv
-
-
 
 load_dotenv() #Loads the created .env with environment variables
 
@@ -48,15 +45,6 @@ def to_usd(my_price):
     Returns: $4,000.44
     """
     return f"${my_price:,.2f}" #> $12,000.71
-
-def sum_product(list1, list2): #This function gives the sumprooduct of two lists of equal length
-    product = []
-    for i in range(0, len(list1)):
-        product.append(list1[i] * list2[i])
-        break
-    subtot = sum(product)
-    return print(subtot)
-     
 
 ################################################ Begin Item Lookup ################################################
 
@@ -137,7 +125,3 @@ print(f"TOTAL:", to_usd(subtot+(TAX_RATE * subtot)))
 print("--------------------------------------")
 print("THANK YOU! PLEASE SHOP AGAIN SOON!")
 print("--------------------------------------")
-
-############################################### Begin Email ################################################
-
-
